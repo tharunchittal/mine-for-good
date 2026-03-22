@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mine-for-good"
+version = "1.0.0"
+description = "Background Monero CPU miner that pauses during user activity"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+dependencies = [
+    "psutil>=5.9.0",
+    "py-cpuinfo>=9.0.0",
+]
+
+[project.scripts]
+mine-for-good = "mine_for_good.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mine_for_good*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
