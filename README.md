@@ -56,6 +56,9 @@ pip install .
 # 1. Enter your Monero wallet address
 mine-for-good configure
 
+# 1b. Or use a simple desktop UI for the same settings
+mine-for-good configure-ui
+
 # 2. Check what the program detected about your machine
 mine-for-good specs
 

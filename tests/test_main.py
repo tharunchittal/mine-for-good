@@ -26,6 +26,12 @@ def test_parser_configure_subcommand():
     assert args.command == "configure"
 
 
+def test_parser_configure_ui_subcommand():
+    parser = build_parser()
+    args = parser.parse_args(["configure-ui"])
+    assert args.command == "configure-ui"
+
+
 def test_parser_specs_subcommand():
     parser = build_parser()
     args = parser.parse_args(["specs"])

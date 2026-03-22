@@ -7,9 +7,10 @@ from pathlib import Path
 from typing import Optional
 
 from mine_for_good import __version__
-from mine_for_good.config import configure_interactive, load_config, save_config
+from mine_for_good.config import configure_interactive, load_config
 from mine_for_good.service import MiningService, PID_FILE, daemonise
 from mine_for_good.specs import get_specs, print_specs
+from mine_for_good.ui import configure_with_ui
 
 
 def _setup_logging(level: str, log_file: Optional[str] = None) -> None:
@@ -28,6 +29,24 @@ def _setup_logging(level: str, log_file: Optional[str] = None) -> None:
 def cmd_configure(_args: argparse.Namespace) -> None:
     configure_interactive()
     print("Configuration saved.")
+
+
+def cmd_configure_ui(_args: argparse.Namespace) -> None:
+    try:
+        saved = configure_with_ui()
+    except RuntimeError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        print(
+            "Tip: install Tk support for Python on your platform, "
+            "or use 'mine-for-good configure'.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if saved:
+        print("Configuration saved.")
+    else:
+        print("Configuration unchanged.")
 
 
 def cmd_specs(_args: argparse.Namespace) -> None:
@@ -106,6 +125,13 @@ def build_parser() -> argparse.ArgumentParser:
     # configure
     p_cfg = sub.add_parser("configure", help="Interactively set wallet address and options")
     p_cfg.set_defaults(func=cmd_configure)
+
+    # configure-ui
+    p_cfg_ui = sub.add_parser(
+        "configure-ui",
+        help="Open a simple desktop UI to edit configuration",
+    )
+    p_cfg_ui.set_defaults(func=cmd_configure_ui)
 
     # specs
     p_specs = sub.add_parser("specs", help="Print system specifications and exit")
